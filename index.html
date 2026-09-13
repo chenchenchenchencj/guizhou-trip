@@ -83,9 +83,9 @@ $('print').addEventListener('click',()=>window.print());calc();
  let loader;
  function leaflet(){if(window.L)return Promise.resolve();if(loader)return loader;loader=new Promise((resolve,reject)=>{const css=document.createElement('link');css.rel='stylesheet';css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.append(css);const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=()=>resolve();s.onerror=reject;document.head.append(s);setTimeout(()=>{if(!window.L)reject(new Error('map timeout'));},16000);});return loader;}
  function start(card){if(card.dataset.started)return;card.dataset.started='1';const r=data.routes.find(x=>x.id===card.dataset.route),stage=card.querySelector('.map-stage'),status=card.querySelector('.map-status');
- leaflet().then(()=>{stage.classList.add('ready');const map=L.map(card.querySelector('.route-map'),{scrollWheelZoom:false,zoomControl:true,attributionControl:true});
+ leaflet().then(()=>{stage.classList.add('ready');const map=L.map(card.querySelector('.route-map'),{scrollWheelZoom:true,zoomControl:true,attributionControl:true});
  const tile=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'});let ok=0;
- tile.on('tileload',()=>{ok++;status.textContent='可拖动地图，点＋／−缩放；选择视角查看当天不同片区。';});tile.on('tileerror',()=>{if(!ok)status.textContent='底图暂未加载；路线连线和逐站高德导航仍可用。';});tile.addTo(map);
+ tile.on('tileload',()=>{ok++;status.textContent='鼠标移到地图上，滚轮向上放大、向下缩小；也可拖动地图或点＋／−。';});tile.on('tileerror',()=>{if(!ok)status.textContent='底图暂未加载；路线连线和逐站高德导航仍可用。';});tile.addTo(map);
  const pts=r.nodes.map(k=>data.poi[k].pos),markers={};
  for(let i=1;i<pts.length;i++){const [mode,label]=r.legs[i-1];L.polyline([pts[i-1],pts[i]],{color:color[mode],weight:4,opacity:.8,dashArray:mode==='metro'?'8 7':undefined}).addTo(map).bindPopup(escape((i)+' → '+(i+1)+' · '+label)+'<br>站点连线示意，实际道路路线请用高德。');}
  if(r.optional){L.polyline(r.optional.map(k=>data.poi[k].pos),{color:color.optional,weight:3,dashArray:'5 8'}).addTo(map).bindPopup('可选：青云市集；累了直接回酒店。');}
