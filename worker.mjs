@@ -10,7 +10,8 @@ export default {
     return new Response(request.method === 'HEAD' ? null : HTML, {
       headers: {
         'Content-Type':'text/html; charset=utf-8',
-        'Cache-Control':'public, max-age=300',
+        'Cache-Control':'no-cache',
+        'X-Trip-Version':'photos-maps-20260913',
         'X-Content-Type-Options':'nosniff',
         'Referrer-Policy':'strict-origin-when-cross-origin'
       }
