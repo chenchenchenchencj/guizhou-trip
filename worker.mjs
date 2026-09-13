@@ -78,7 +78,7 @@ export default {
       return new Response('Method not allowed', {status:405, headers:{Allow:'GET, HEAD'}});
     }
     if (path === '/favicon.ico') return new Response(null, {status:204});
-    if (path !== '/' && path !== '/index.html') return new Response('Not found', {status:404});
+    if (!['/', '/index.html', '/guide'].includes(path)) return new Response('Not found', {status:404});
     return new Response(request.method === 'HEAD' ? null : HTML, {
       headers: {
         'Content-Type':'text/html; charset=utf-8',
